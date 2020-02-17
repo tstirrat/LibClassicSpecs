@@ -4,6 +4,7 @@
 ## Version: 0.9.0
 ## Author: Grehy-Arugal
 ## X-Category: Library
+## X-Curse-Project-ID: 363313
 
 Libs/LibStub/LibStub.lua
 
