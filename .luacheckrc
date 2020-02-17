@@ -80,7 +80,6 @@ globals = {
   "tinsert",
   "tremove",
   "wipe",
-
   -- everything else
   "C_Timer",
   "CastingInfo",
@@ -100,10 +99,11 @@ globals = {
   "UnitAura",
   "UnitCastingInfo",
   "UnitChannelInfo",
+  "UnitClass",
   "UnitExists",
   "UnitGUID",
   "UnitHealth",
-  "UnitHealthMax"
+  "UnitHealthMax",
   "UnitIsFriend",
   "UnitIsUnit",
   "UnitPlayerOrPetInParty",

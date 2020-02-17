@@ -1,0 +1,10 @@
+## Interface: 11303
+## Title: Lib: ClassicSpecs
+## Notes: Restores the retail specialization info in Classic
+## Version: 0.9.0
+## Author: Grehy-Arugal
+## X-Category: Library
+
+Libs/LibStub/LibStub.lua
+
+LibClassicSpecs.lua
