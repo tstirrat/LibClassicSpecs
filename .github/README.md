@@ -10,7 +10,7 @@ Where possible this uses the same global spec ids as in retail.
 local LibClassicSpecs = LibStub("LibClassicSpecs")
 
 local MAX_TALENT_TIERS                = _G.MAX_TALENT_TIERS or LibClassicSpecs.MAX_TALENT_TIERS
-local NUM_TALENT_COLUMNS                = _G.NUM_TALENT_COLUMNS or LibClassicSpecs.NUM_TALENT_COLUMNS
+local NUM_TALENT_COLUMNS              = _G.NUM_TALENT_COLUMNS or LibClassicSpecs.NUM_TALENT_COLUMNS
 
 local GetNumClasses                   = _G.GetNumClasses or LibClassicSpecs.GetNumClasses
 local GetClassInfo                    = _G.GetClassInfo or LibClassicSpecs.GetClassInfo
