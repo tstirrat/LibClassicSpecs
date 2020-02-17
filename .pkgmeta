@@ -2,6 +2,6 @@ package-as: LibClassicSpecs
 enable-nolib-creation: no
 
 externals:
-    LibStub:
+    Lib/LibStub:
         url: svn://svn.wowace.com/wow/libstub/mainline/trunk
         tag: latest

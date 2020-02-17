@@ -1,7 +1,7 @@
 std = "lua51"
 max_line_length = 100
 exclude_files = {
-  "LibStub/**"
+  "Lib/**"
 }
 only = {
   "011", -- syntax
