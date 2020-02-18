@@ -2,6 +2,9 @@ local MAJOR, MINOR = "LibClassicSpecs", "0.9.0"
 local LibClassicSpecs = LibStub:NewLibrary(MAJOR, MINOR)
 
 if (LibClassicSpecs) then
+  LibClassicSpecs.MAX_TALENT_TIERS = 7
+  LibClassicSpecs.NUM_TALENT_COLUMNS = 4
+
   -- TODO: displayName param should be i18n
   local Warrior = {
     ID = 1,
@@ -469,16 +472,13 @@ if (LibClassicSpecs) then
       role = Role.Damager,
       isRecommended = true,
       primaryStat = Stat.Agility
-    },
+    }
   }
 
   local ROLE_MAP = {}
   for specId, v in pairs(SpecInfo) do
     ROLE_MAP[specId] = v.role
   end
-
-  LibClassicSpecs.MAX_TALENT_TIERS = GetNumTalentTabs()
-  LibClassicSpecs.NUM_TALENT_COLUMNS = 28 -- 4 talents * 7 tiers
 
   LibClassicSpecs.GetClassInfo = function(classId)
     local info = ClassByID[classId]
@@ -522,7 +522,7 @@ if (LibClassicSpecs) then
     local _, className = UnitClass("player")
     local specId = NAME_TO_SPEC_MAP[className][specIndex]
 
-    print("GetSpecializationInfo", specIndex, className, specId)
+    -- print("GetSpecializationInfo", specIndex, className, specId)
 
     local spec = SpecInfo[specId]
     return spec.ID, spec.name, spec.description, spec.icon, spec.background, spec.role, spec.primaryStat
@@ -530,7 +530,7 @@ if (LibClassicSpecs) then
 
   LibClassicSpecs.GetSpecializationInfoForClassID = function(classId, specIndex)
     local class = ClassByID[classId]
-    print("GetSpecializationInfoForClassID", classId, class.name, specIndex)
+    -- print("GetSpecializationInfoForClassID", classId, class.name, specIndex)
     local specId = NAME_TO_SPEC_MAP[class.name][specIndex]
     local info = SpecInfo[specId]
 
