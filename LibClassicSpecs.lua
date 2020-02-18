@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibClassicSpecs", "0.9.0"
+local MAJOR, MINOR = "LibClassicSpecs", "0.9.0-@project-revision@"
 local LibClassicSpecs = LibStub:NewLibrary(MAJOR, MINOR)
 
 if (LibClassicSpecs) then
