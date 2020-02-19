@@ -53,14 +53,14 @@ class ids:
 for classId = 1, GetNumClasses() do
   local specId, specName = GetSpecializationInfoForClassID(classId, 1)
 
-  local _, className, displayName == GetClassInfo()
+  local displayName, internalName == GetClassInfo(classId)
 
   if (UnitClass("player") == classId) then
     print("You are playing a", displayName)
     -- You are playing a Warrior
   end
 
-  print("Class", className, "has spec", specName, "with id", specId)
+  print("Class", internalName, "has spec", specName, "with id", specId)
   -- Class WARRIOR has spec Arms with id 71
 end
 ```
