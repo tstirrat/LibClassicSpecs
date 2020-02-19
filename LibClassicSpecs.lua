@@ -76,6 +76,21 @@ if (LibClassicSpecs) then
   }
   local DH = {ID = 12, displayName = "Demon hunter", name = "DEMONHUNTER", Havoc = 577, Veng = 581}
 
+  LibClassicSpecs.Class = {
+    Warrior = Warrior,
+    Paladin = Paladin,
+    Hunter = Hunter,
+    Rogue = Rogue,
+    Priest = Priest,
+    DK = DK,
+    Shaman = Shaman,
+    Mage = Mage,
+    Warlock = Warlock,
+    Monk = Monk,
+    Druid = Druid,
+    DH = DH,
+  }
+
   local ClassByID = {
     Warrior,
     Paladin,
@@ -99,11 +114,15 @@ if (LibClassicSpecs) then
     Spirit = 5
   }
 
+  LibClassicSpecs.Stat = Stat
+
   local Role = {
     Damager = "DAMAGER",
     Tank = "TANK",
     Healer = "HEALER"
   }
+
+  LibClassicSpecs.Role = Role
 
   -- Map of spec (tab) index to spec id
   local NAME_TO_SPEC_MAP = {
@@ -179,7 +198,7 @@ if (LibClassicSpecs) then
       description = "",
       icon = "",
       background = "",
-      role = Role.Tank,
+      role = Role.Damager,
       isRecommended = true,
       primaryStat = Stat.Strength
     },
@@ -475,6 +494,8 @@ if (LibClassicSpecs) then
     }
   }
 
+  LibClassicSpecs.SpecInfo = SpecInfo
+
   local ROLE_MAP = {}
   for specId, v in pairs(SpecInfo) do
     ROLE_MAP[specId] = v.role
@@ -522,6 +543,10 @@ if (LibClassicSpecs) then
     local _, className = UnitClass("player")
     local specId = NAME_TO_SPEC_MAP[className][specIndex]
 
+    if not specId then
+      return nil
+    end
+
     -- print("GetSpecializationInfo", specIndex, className, specId)
 
     local spec = SpecInfo[specId]
@@ -530,6 +555,10 @@ if (LibClassicSpecs) then
 
   LibClassicSpecs.GetSpecializationInfoForClassID = function(classId, specIndex)
     local class = ClassByID[classId]
+    if not class then
+      return nil
+    end
+
     -- print("GetSpecializationInfoForClassID", classId, class.name, specIndex)
     local specId = NAME_TO_SPEC_MAP[class.name][specIndex]
     local info = SpecInfo[specId]

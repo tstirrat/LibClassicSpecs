@@ -15,8 +15,16 @@ jobs:
         luarocks install --local luacheck
         /home/runner/.luarocks/bin/luacheck . --no-color -q
 
+    - name: Install and run busted
+      run: |
+        sudo apt-get install luarocks
+        luarocks install --local busted
+        curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z
+        cd .release/LibClassicSpecs
+        /home/runner/.luarocks/bin/busted --shuffle --output=plainTerminal .
+
     - name: Create Package
-      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z -g 1.13.3
+      run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -s -- -d -z
       env:
         CF_API_KEY: ${{ secrets.CF_API_KEY }}
         GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
