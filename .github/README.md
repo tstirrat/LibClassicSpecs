@@ -24,4 +24,41 @@ local GetSpecializationInfoForClassID = _G.GetSpecializationInfoForClassID or Li
 
 local GetSpecializationRole           = _G.GetSpecializationRole or LibClassicSpecs.GetSpecializationRole
 local GetSpecializationRoleByID       = _G.GetSpecializationRoleByID or LibClassicSpecs.GetSpecializationRoleByID
+
+
+-- Useful constants/enums
+local Role = LibClassicSpecs.Role
+local Class = LibClassicSpecs.Class
+local Stat = LibClassicSpecs.Stat
+
+Class.Warrior.ID -- 1
+Class.Warrior.name -- "WARRIOR"
+Class.Warrior.Arms -- 71 (same as in retail)
+Stat.Agility  -- 2
+Role.Damager  -- "DAMAGER"
+
+GetSpecializationInfoForClassID(Class.Warrior.ID, 1) -- 71 (Warrior.Arms), "Arms"
+```
+
+### GetNumClasses
+
+There are 9 classes in classic, but they are NOT the first 9 ids. Druids are
+class ID 11 even in classic.
+
+Therefore `GetNumClasses()` returns all retail classes (12), this is essential
+for the case where your addon tries to iterate classes. It should receive usable
+class ids:
+
+```lua
+for classId = 1, GetNumClasses() do
+  local specId, specName = GetSpecializationInfoForClassID(classId, 1)
+
+  local id, className, displayName == GetClassInfo()
+
+  if (UnitClass("player") == classId) then
+    print("You are playing a", displayName)
+  end
+
+  print("Class", className, "has spec", specName, "with id", specId)
+end
 ```
