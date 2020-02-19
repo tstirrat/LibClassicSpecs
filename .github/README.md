@@ -53,7 +53,7 @@ class ids:
 for classId = 1, GetNumClasses() do
   local specId, specName = GetSpecializationInfoForClassID(classId, 1)
 
-  local id, className, displayName == GetClassInfo()
+  local specId, className, displayName == GetClassInfo()
 
   if (UnitClass("player") == classId) then
     print("You are playing a", displayName)
