@@ -57,8 +57,10 @@ for classId = 1, GetNumClasses() do
 
   if (UnitClass("player") == classId) then
     print("You are playing a", displayName)
+    -- You are playing a Warrior
   end
 
   print("Class", className, "has spec", specName, "with id", specId)
+  -- Class WARRIOR has spec Arms with id 71
 end
 ```
