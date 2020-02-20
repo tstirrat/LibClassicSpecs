@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibClassicSpecs", "0.9.0-@project-revision@"
+local MAJOR, MINOR = "LibClassicSpecs", "@project-version@"
 local LibClassicSpecs = LibStub:NewLibrary(MAJOR, MINOR)
 
 if (LibClassicSpecs) then
@@ -547,7 +547,8 @@ if (LibClassicSpecs) then
       return nil
     end
 
-    -- print("GetSpecializationInfo", specIndex, className, specId)
+    --[===[@debug
+    print("GetSpecializationInfo", specIndex, className, specId) --@end-debug]===]
 
     local spec = SpecInfo[specId]
     return spec.ID, spec.name, spec.description, spec.icon, spec.background, spec.role, spec.primaryStat
@@ -559,7 +560,8 @@ if (LibClassicSpecs) then
       return nil
     end
 
-    -- print("GetSpecializationInfoForClassID", classId, class.name, specIndex)
+    --[===[@debug
+    print("GetSpecializationInfoForClassID", classId, class.name, specIndex) --@end-debug]===]
     local specId = NAME_TO_SPEC_MAP[class.name][specIndex]
     local info = SpecInfo[specId]
 
