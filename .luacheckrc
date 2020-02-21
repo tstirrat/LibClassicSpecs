@@ -90,6 +90,7 @@ globals = {
   "GetNumTalents",
   "GetNumTalentTabs",
   "GetSpellInfo",
+  "GetTalentInfo",
   "GetTime",
   "GetUnitSpeed",
   "IsInGroup",

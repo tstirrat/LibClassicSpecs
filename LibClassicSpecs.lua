@@ -527,7 +527,11 @@ if (LibClassicSpecs) then
     local specIndex
     local max = 0
     for tabIndex = 1, GetNumTalentTabs() do
-      local count = GetNumTalents(tabIndex)
+      local count = 0
+      for talentIndex = 1, GetNumTalents(tabIndex) do
+        local rank = select(5, GetTalentInfo(tabIndex, talentIndex))
+        count = count + rank
+      end
       if (count > max) then
         specIndex = tabIndex
         max = count

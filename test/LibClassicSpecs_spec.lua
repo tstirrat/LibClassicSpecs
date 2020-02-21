@@ -26,6 +26,52 @@ insulate("LibClassicSpecs", function()
     end)
   end)  -- GetNumClasses
 
+  describe("GetSpecialization", function()
+    local TALENTS_17_34_0 = {
+      -- Arms
+      {
+        3, 0, 3,
+        0, 5, 0,
+        0, 1, 3,
+        0, 2
+      },
+      -- Fury
+      {
+        0, 5,
+        0, 5,
+        0, 0, 0, 5,
+        5, 2, 5,
+        0, 1, 0,
+        0, 5,
+        1
+      },
+      -- Prot
+      {}
+    }
+    before_each(function()
+      _G.GetNumTalentTabs = function() return 3 end
+
+      _G.GetNumTalents = function() return 17 end
+
+      _G.GetTalentInfo = function(tabIndex, talentIndex)
+        local spent = TALENTS_17_34_0[tabIndex][talentIndex] or 0
+        return nil, nil, nil, nil, spent, 5
+      end
+    end)
+
+    it("returns the tabIndex for the tab with most spent talent points", function()
+      assert.are.equal(2, LCS.GetSpecialization())
+    end)
+
+    it("returns nil for isInspect", function()
+      assert.is_nil(LCS.GetSpecialization(true))
+    end)
+
+    it("returns nil for isPet", function()
+      assert.is_nil(LCS.GetSpecialization(nil, true))
+    end)
+  end)  -- GetSpecialization
+
   describe("GetSpecializationRole", function()
     before_each(function()
       _G.UnitClass = function()
