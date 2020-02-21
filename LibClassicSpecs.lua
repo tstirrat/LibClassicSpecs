@@ -5,7 +5,7 @@ if (LibClassicSpecs) then
   LibClassicSpecs.MAX_TALENT_TIERS = 7
   LibClassicSpecs.NUM_TALENT_COLUMNS = 4
 
-  -- TODO: displayName param should be i18n
+  -- TODO(#4): displayName param should be i18n
   local Warrior = {
     ID = 1,
     displayName = "Warrior",
