@@ -27,35 +27,15 @@ insulate("LibClassicSpecs", function()
   end)  -- GetNumClasses
 
   describe("GetSpecialization", function()
-    local TALENTS_17_34_0 = {
-      -- Arms
-      {
-        3, 0, 3,
-        0, 5, 0,
-        0, 1, 3,
-        0, 2
-      },
-      -- Fury
-      {
-        0, 5,
-        0, 5,
-        0, 0, 0, 5,
-        5, 2, 5,
-        0, 1, 0,
-        0, 5,
-        1
-      },
-      -- Prot
-      {}
-    }
+    local TALENTS_17_34_0 = {17, 34, 0}
     before_each(function()
       _G.GetNumTalentTabs = function() return 3 end
 
       _G.GetNumTalents = function() return 17 end
 
-      _G.GetTalentInfo = function(tabIndex, talentIndex)
-        local spent = TALENTS_17_34_0[tabIndex][talentIndex] or 0
-        return nil, nil, nil, nil, spent, 5
+      _G.GetTalentTabInfo = function(tabIndex, talentIndex)
+        local spent = TALENTS_17_34_0[tabIndex] or 0
+        return nil, nil, spent, nil
       end
     end)
 
