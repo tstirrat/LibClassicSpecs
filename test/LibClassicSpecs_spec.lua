@@ -4,27 +4,57 @@ require("Lib/LibStub/LibStub")
 require("LibClassicSpecs")
 
 insulate("LibClassicSpecs", function()
-  local LCS
+  local lib
   local Role
   local Class
 
   before_each(function()
-    LCS = LibStub("LibClassicSpecs")
-    Role = LCS.Role
-    Class = LCS.Class
+    lib = LibStub("LibClassicSpecs")
+    Role = lib.Role
+    Class = lib.Class
   end)
 
   describe("GetActiveSpecGroup", function()
     it("always returns 1", function()
-      assert.are.equal(1, LCS.GetActiveSpecGroup())
+      assert.are.equal(1, lib.GetActiveSpecGroup())
     end)
   end)  -- GetActiveSpecGroup
 
   describe("GetNumClasses", function()
     it("always returns 12", function()
-      assert.are.equal(12, LCS.GetNumClasses())
+      assert.are.equal(12, lib.GetNumClasses())
     end)
   end)  -- GetNumClasses
+
+  describe("GetClassInfo", function()
+    it("returns the info for given class id", function()
+      local engName, name, id = lib.GetClassInfo(Class.Priest.ID)
+      assert.are.equal(5, id)
+      assert.are.equal("PRIEST", name)
+      assert.are.equal("Priest", engName)
+    end)
+
+    it("returns nil for invalid class id", function()
+      assert.is_nil(lib.GetClassInfo(-1))
+      assert.is_nil(lib.GetClassInfo(0))
+      assert.is_nil(lib.GetClassInfo(13))
+    end)
+  end)  -- GetClassInfo
+
+  describe("GetNumSpecializationsForClassID", function()
+    it("returns the spec count (always 3) for the class", function()
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Warrior.ID))
+      -- TODO(tstirrat/LibClassicSpecs#11): handle druid's 4th spec
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Druid.ID))
+      assert.are.equal(2, lib.GetNumSpecializationsForClassID(Class.DH.ID))
+    end)
+
+    it("returns nil for invalid class id", function()
+      assert.is_nil(lib.GetNumSpecializationsForClassID(14))
+      assert.is_nil(lib.GetNumSpecializationsForClassID(0))
+      assert.is_nil(lib.GetNumSpecializationsForClassID(-1))
+    end)
+  end)  -- GetNumSpecializationsForClassID
 
   describe("GetSpecialization", function()
     local TALENTS_17_34_0 = {17, 34, 0}
@@ -40,15 +70,15 @@ insulate("LibClassicSpecs", function()
     end)
 
     it("returns the tabIndex for the tab with most spent talent points", function()
-      assert.are.equal(2, LCS.GetSpecialization())
+      assert.are.equal(2, lib.GetSpecialization())
     end)
 
     it("returns nil for isInspect", function()
-      assert.is_nil(LCS.GetSpecialization(true))
+      assert.is_nil(lib.GetSpecialization(true))
     end)
 
     it("returns nil for isPet", function()
-      assert.is_nil(LCS.GetSpecialization(nil, true))
+      assert.is_nil(lib.GetSpecialization(nil, true))
     end)
   end)  -- GetSpecialization
 
@@ -60,17 +90,17 @@ insulate("LibClassicSpecs", function()
     end)
 
     it("returns a role for each specIndex for the current class", function()
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRole(1))  -- Warrior.Arms
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRole(2))  -- Warrior.Fury
-      assert.are.equal(Role.Tank, LCS.GetSpecializationRole(3))  -- Warrior.Prot
+      assert.are.equal(Role.Damager, lib.GetSpecializationRole(1))  -- Warrior.Arms
+      assert.are.equal(Role.Damager, lib.GetSpecializationRole(2))  -- Warrior.Fury
+      assert.are.equal(Role.Tank, lib.GetSpecializationRole(3))  -- Warrior.Prot
     end)
 
     it("returns nil for isInspect", function()
-      assert.is_nil(LCS.GetSpecializationRole(1, true))
+      assert.is_nil(lib.GetSpecializationRole(1, true))
     end)
 
     it("returns nil for isPet", function()
-      assert.is_nil(LCS.GetSpecializationRole(1, false, true))
+      assert.is_nil(lib.GetSpecializationRole(1, false, true))
     end)
   end)  -- GetSpecializationRole
 
@@ -82,32 +112,36 @@ insulate("LibClassicSpecs", function()
     end)
 
     it("returns nil on invalid classId", function()
-      assert.is_nil(LCS.GetSpecializationInfoForClassID(0))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(0))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(12))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(-1))
     end)
 
     it("returns nil on invalid specIndex", function()
-      assert.is_nil(LCS.GetSpecializationInfoForClassID(Class.Warrior.ID, 5))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(Class.Warrior.ID, 0))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(Class.Warrior.ID, 5))
+      assert.is_nil(lib.GetSpecializationInfoForClassID(Class.Warrior.ID, -1))
     end)
 
     it("returns spec info for a valid class/spec", function()
-      local ID, name, description, icon, role, isRecommended, isAllowed = LCS.GetSpecializationInfoForClassID(Class.Warrior.ID, 1)
+      local ID, name, description, icon, role, isRecommended, isAllowed = lib.GetSpecializationInfoForClassID(Class.Warrior.ID, 1)
       assert.are.equal(Class.Warrior.Arms, ID)
       assert.are.equal("Arms", name)
       assert.are.equal(Role.Damager, role)
 
-      ID, name, description, icon, role, isRecommended, isAllowed = LCS.GetSpecializationInfoForClassID(Class.Priest.ID, 1)
+      ID, name, description, icon, role, isRecommended, isAllowed = lib.GetSpecializationInfoForClassID(Class.Priest.ID, 1)
       assert.are.equal(Class.Priest.Disc, ID)
       assert.are.equal("Discipline", name)
       assert.are.equal(Role.Healer, role)
     end)
 
     it("returns isAllowed == true for the current class", function()
-      local isAllowed = select(7, LCS.GetSpecializationInfoForClassID(Class.Warrior.ID, 1))
+      local isAllowed = select(7, lib.GetSpecializationInfoForClassID(Class.Warrior.ID, 1))
       assert.True(isAllowed)
     end)
 
     it("returns isAllowed == false for the any other class", function()
-      local isAllowed = select(7, LCS.GetSpecializationInfoForClassID(Class.Priest.ID, 1))
+      local isAllowed = select(7, lib.GetSpecializationInfoForClassID(Class.Priest.ID, 1))
       assert.False(isAllowed)
     end)
   end)  -- GetSpecializationInfoForClassID
@@ -120,74 +154,78 @@ insulate("LibClassicSpecs", function()
     end)
 
     it("returns nil on isInspect", function()
-      assert.is_nil(LCS.GetSpecializationInfo(1, true))
+      assert.is_nil(lib.GetSpecializationInfo(1, true))
     end)
 
     it("returns nil on isPet", function()
-      assert.is_nil(LCS.GetSpecializationInfo(1, false, true))
+      assert.is_nil(lib.GetSpecializationInfo(1, false, true))
     end)
 
     it("returns nil on invalid specIndex", function()
-      assert.is_nil(LCS.GetSpecializationInfo(5))
+      assert.is_nil(lib.GetSpecializationInfo(5))
+      assert.is_nil(lib.GetSpecializationInfo(0))
+      assert.is_nil(lib.GetSpecializationInfo(-1))
     end)
 
     it("returns spec info for the current class's specIndex", function()
-      local ID, name, description, icon, bg, role, primaryStat = LCS.GetSpecializationInfo(1)
+      local ID, name, description, icon, bg, role, primaryStat = lib.GetSpecializationInfo(1)
       assert.are.equal(Class.Warrior.Arms, ID)
       assert.are.equal("Arms", name)
       assert.are.equal(Role.Damager, role)
-      assert.are.equal(LCS.Stat.Strength, primaryStat)
+      assert.are.equal(lib.Stat.Strength, primaryStat)
 
-      ID, name, description, icon, bg, role, primaryStat = LCS.GetSpecializationInfo(3)
+      ID, name, description, icon, bg, role, primaryStat = lib.GetSpecializationInfo(3)
       assert.are.equal(Class.Warrior.Prot, ID)
       assert.are.equal("Protection", name)
       assert.are.equal(Role.Tank, role)
-      assert.are.equal(LCS.Stat.Strength, primaryStat)
+      assert.are.equal(lib.Stat.Strength, primaryStat)
     end)
   end)  -- GetSpecializationInfo
 
   describe("GetSpecializationRoleByID", function()
     it("returns a role for each class spec", function()
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Warrior.Arms))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Warrior.Fury))
-      assert.are.equal(Role.Tank, LCS.GetSpecializationRoleByID(Class.Warrior.Prot))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warrior.Arms))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warrior.Fury))
+      assert.are.equal(Role.Tank, lib.GetSpecializationRoleByID(Class.Warrior.Prot))
 
-      assert.are.equal(Role.Healer, LCS.GetSpecializationRoleByID(Class.Paladin.Holy))
-      assert.are.equal(Role.Tank, LCS.GetSpecializationRoleByID(Class.Paladin.Prot))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Paladin.Ret))
+      assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Paladin.Holy))
+      assert.are.equal(Role.Tank, lib.GetSpecializationRoleByID(Class.Paladin.Prot))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Paladin.Ret))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Hunter.BM))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Hunter.MM))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Hunter.SV))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Hunter.BM))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Hunter.MM))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Hunter.SV))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Rogue.Combat))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Rogue.Assasin))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Rogue.Sub))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Rogue.Combat))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Rogue.Assasin))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Rogue.Sub))
 
-      assert.are.equal(Role.Healer, LCS.GetSpecializationRoleByID(Class.Priest.Disc))
-      assert.are.equal(Role.Healer, LCS.GetSpecializationRoleByID(Class.Priest.Holy))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Priest.Shadow))
+      assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Priest.Disc))
+      assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Priest.Holy))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Priest.Shadow))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Shaman.Ele))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Shaman.Enh))
-      assert.are.equal(Role.Healer, LCS.GetSpecializationRoleByID(Class.Shaman.Resto))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Shaman.Ele))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Shaman.Enh))
+      assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Shaman.Resto))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Mage.Arcane))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Mage.Fire))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Mage.Frost))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Mage.Arcane))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Mage.Fire))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Mage.Frost))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Warlock.Affl))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Warlock.Demo))
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Warlock.Destro))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warlock.Affl))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warlock.Demo))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warlock.Destro))
 
-      assert.are.equal(Role.Damager, LCS.GetSpecializationRoleByID(Class.Druid.Balance))
-      assert.are.equal(Role.Tank, LCS.GetSpecializationRoleByID(Class.Druid.Feral))
-      assert.are.equal(Role.Healer, LCS.GetSpecializationRoleByID(Class.Druid.Resto))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Druid.Balance))
+      assert.are.equal(Role.Tank, lib.GetSpecializationRoleByID(Class.Druid.Feral))
+      assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Druid.Resto))
     end)
 
     it("returns nil for an invalid specId", function()
-      assert.are.equal(nil, LCS.GetSpecializationRoleByID(0))
-      assert.are.equal(nil, LCS.GetSpecializationRoleByID(nil))
+      assert.are.equal(nil, lib.GetSpecializationRoleByID(0))
+      assert.are.equal(nil, lib.GetSpecializationRoleByID(nil))
+      assert.are.equal(nil, lib.GetSpecializationRoleByID(-1))
+      assert.are.equal(nil, lib.GetSpecializationRoleByID(1))
     end)
   end)  -- GetSpecializationRoleByID
 
