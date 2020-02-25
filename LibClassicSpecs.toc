@@ -7,6 +7,8 @@
 ## X-Curse-Project-ID: 363313
 ## X-WoWI-ID: 25508
 
+#@no-lib-strip@
 Lib/LibStub/LibStub.lua
+#@end-no-lib-strip@
 
 LibClassicSpecs.lua
