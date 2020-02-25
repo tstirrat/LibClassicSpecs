@@ -1,4 +1,4 @@
-# LibClassicSpecs
+# LibClassicSpecs [![Coverage Status](https://coveralls.io/repos/github/tstirrat/LibClassicSpecs/badge.svg?branch=master)](https://coveralls.io/github/tstirrat/LibClassicSpecs?branch=master)
 
 Restores the retail specialization methods in Classic
 
