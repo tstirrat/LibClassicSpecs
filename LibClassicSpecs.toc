@@ -7,6 +7,6 @@
 ## X-Curse-Project-ID: 363313
 ## X-WoWI-ID: 25508
 
-Libs/LibStub/LibStub.lua
+Lib/LibStub/LibStub.lua
 
 LibClassicSpecs.lua
