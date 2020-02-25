@@ -82,6 +82,13 @@ insulate("LibClassicSpecs", function()
     end)
   end)  -- GetSpecialization
 
+  describe("GetInspectSpecialization", function()
+    it("ralways returns nil", function()
+      assert.is_nil(lib.GetInspectSpecialization("party1"))
+      assert.is_nil(lib.GetInspectSpecialization("target"))
+    end)
+  end)  -- GetInspectSpecialization
+
   describe("GetSpecializationRole", function()
     before_each(function()
       _G.UnitClass = function()

@@ -521,7 +521,7 @@ lib.GetNumSpecializationsForClassID = function(classId)
   return #specs
 end
 
-lib.GetInspectSpecialization = function()
+lib.GetInspectSpecialization = function(unit)
   return nil
 end
 
