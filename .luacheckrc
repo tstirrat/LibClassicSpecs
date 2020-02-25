@@ -12,6 +12,13 @@ ignore = {
   "1/[A-Z][A-Z][A-Z0-9_]+" -- three letter+ constants
 }
 globals = {
+  -- test api
+  "after_each",
+  "assert",
+  "before_each",
+  "describe",
+  "insulate",
+  "it",
   -- wow std api
   "abs",
   "acos",
