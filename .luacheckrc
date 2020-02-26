@@ -20,6 +20,8 @@ globals = {
   "insulate",
   "it",
 
+  "LibStub",
+
   -- FrameXML misc
 	"C_Timer",
 	"ChatFrame_AddMessageEventFilter",
@@ -2530,6 +2532,7 @@ globals = {
 	"GetTabardCreationCost",
 	"GetTabardInfo",
 	"GetTalentInfo",
+	"GetTalentTabInfo",
 	"GetTalentInfoByID",
 	"GetTalentInfoBySpecialization",
 	"GetTalentLink",
