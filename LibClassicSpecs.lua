@@ -1,9 +1,11 @@
 local MAJOR, MINOR = "LibClassicSpecs", "0.9.3-@project-revision@"
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
+-- luacov: disable
 if not lib then
   return
 end
+-- luacov: enable
 
 lib.MAX_TALENT_TIERS = 7
 lib.NUM_TALENT_COLUMNS = 4
