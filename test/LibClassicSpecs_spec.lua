@@ -42,10 +42,21 @@ insulate("LibClassicSpecs", function()
   end)  -- GetClassInfo
 
   describe("GetNumSpecializationsForClassID", function()
-    it("returns the spec count (always 3) for the class", function()
+    it("returns 3 for most classes", function()
       assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Warrior.ID))
-      -- TODO(tstirrat/LibClassicSpecs#11): handle druid's 4th spec
-      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Druid.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Priest.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Paladin.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Mage.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Warlock.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Hunter.ID))
+      assert.are.equal(3, lib.GetNumSpecializationsForClassID(Class.Shaman.ID))
+    end)
+
+    it("returns 4 for Druid", function()
+      assert.are.equal(4, lib.GetNumSpecializationsForClassID(Class.Druid.ID))
+    end)
+
+    it("returns 2 for Demon Hunter", function()
       assert.are.equal(2, lib.GetNumSpecializationsForClassID(Class.DH.ID))
     end)
 
@@ -59,6 +70,7 @@ insulate("LibClassicSpecs", function()
   describe("GetSpecialization", function()
     local TALENTS_17_34_0 = {17, 34, 0}
     before_each(function()
+      _G.UnitClass = function() return "", Class.Warrior.ID, Class.Warrior.ID end
       _G.GetNumTalentTabs = function() return 3 end
 
       _G.GetNumTalents = function() return 17 end
@@ -80,6 +92,51 @@ insulate("LibClassicSpecs", function()
     it("returns nil for isPet", function()
       assert.is_nil(lib.GetSpecialization(nil, true))
     end)
+
+    describe("for druids", function()
+      before_each(function()
+        _G.UnitClass = function() return "", Class.Druid.name, Class.Druid.ID end
+
+        local FERAL = {14, 32, 5}
+        _G.GetTalentTabInfo = function(tabIndex, talentIndex)
+          local spent = FERAL[tabIndex] or 0
+          return nil, nil, spent, nil
+        end
+
+        _G.GetTalentInfo = function(tabIndex, talentIndex)
+          return nil, nil, nil, nil, 0
+        end
+      end)
+
+      it("returns Guardian index (3) if certain talent points are selected", function()
+        _G.GetTalentInfo = function(tabIndex, talentIndex)
+          return nil, nil, nil, nil, 5
+        end
+        assert.are.equal(3, lib.GetSpecialization())
+      end)
+
+      it("returns Feral index (2) if certain talent points are not selected", function()
+        assert.are.equal(2, lib.GetSpecialization())
+      end)
+
+      it("returns Resto index (4) if Resto has more points", function()
+        local RESTO = {12, 0, 39}
+        _G.GetTalentTabInfo = function(tabIndex, talentIndex)
+          local spent = RESTO[tabIndex] or 0
+          return nil, nil, spent, nil
+        end
+        assert.are.equal(4, lib.GetSpecialization())
+      end)
+
+      it("returns Balance index (1) if Balance has more points", function()
+        local BALANCE = {37, 0, 14}
+        _G.GetTalentTabInfo = function(tabIndex, talentIndex)
+          local spent = BALANCE[tabIndex] or 0
+          return nil, nil, spent, nil
+        end
+        assert.are.equal(1, lib.GetSpecialization())
+      end)
+    end)  -- for druids
   end)  -- GetSpecialization
 
   describe("GetInspectSpecialization", function()
@@ -92,7 +149,7 @@ insulate("LibClassicSpecs", function()
   describe("GetSpecializationRole", function()
     before_each(function()
       _G.UnitClass = function()
-        return Class.Warrior.ID, Class.Warrior.name
+        return "", Class.Warrior.name, Class.Warrior.ID
       end
     end)
 
@@ -114,7 +171,7 @@ insulate("LibClassicSpecs", function()
   describe("GetSpecializationInfoForClassID", function()
     before_each(function()
       _G.UnitClass = function()
-        return Class.Warrior.ID, Class.Warrior.name
+        return "", Class.Warrior.name, Class.Warrior.ID
       end
     end)
 
@@ -156,7 +213,7 @@ insulate("LibClassicSpecs", function()
   describe("GetSpecializationInfo", function()
     before_each(function()
       _G.UnitClass = function()
-        return Class.Warrior.ID, Class.Warrior.name
+        return "", Class.Warrior.name, Class.Warrior.ID
       end
     end)
 
@@ -224,8 +281,9 @@ insulate("LibClassicSpecs", function()
       assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Warlock.Destro))
 
       assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Druid.Balance))
-      assert.are.equal(Role.Tank, lib.GetSpecializationRoleByID(Class.Druid.Feral))
+      assert.are.equal(Role.Damager, lib.GetSpecializationRoleByID(Class.Druid.Feral))
       assert.are.equal(Role.Healer, lib.GetSpecializationRoleByID(Class.Druid.Resto))
+      assert.are.equal(Role.Tank, lib.GetSpecializationRoleByID(Class.Druid.Guardian))
     end)
 
     it("returns nil for an invalid specId", function()
