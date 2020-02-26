@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 rm lcov.info
 ~/.luarocks/bin/busted --coverage --shuffle .
 ~/.luarocks/bin/luacov -r lcov LibClassicSpecs

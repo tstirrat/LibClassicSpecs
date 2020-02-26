@@ -64,3 +64,17 @@ for classId = 1, GetNumClasses() do
   -- Class WARRIOR has spec Arms with id 71
 end
 ```
+
+## Contributing
+
+### Repo setup
+
+```sh
+.bin/init.sh
+```
+
+### Running tests
+
+```sh
+.bin/test.sh
+```
