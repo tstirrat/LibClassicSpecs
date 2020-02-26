@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibClassicSpecs", "0.9.3-@project-revision@"
+local MAJOR, MINOR = "LibClassicSpecs", 1000 + tonumber(strmatch("@project-revision@", "%d+") or 0)
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 -- luacov: disable
